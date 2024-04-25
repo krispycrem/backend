@@ -2,9 +2,7 @@ const Person = require('./models/person')
 const express = require('express')
 const cors = require('cors')
 const morgan = require("morgan")
-// const mongoose = require('mongoose')
 
-// const password = process.argv[2]
 
 const app = express()
 
@@ -12,32 +10,6 @@ app.use(express.json())
 app.use(cors())
 app.use(express.static('dist'))
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
-
-
-
-// const url =
-//   `mongodb+srv://obananas073:${password}@persons-db.gxqyxqg.mongodb.net/personApp?`
-
-
-// mongoose.set('strictQuery',false)
-// mongoose.connect(url)
-
-
-// const personSchema = new mongoose.Schema({
-//   name: String,
-//   number: String,
-// })
-
-// personSchema.set('toJSON', {
-//   transform: (document, returnedObject) => {
-//     returnedObject.id = returnedObject._id.toString()
-//     delete returnedObject._id
-//     delete returnedObject.__v
-//   }
-// })
-
-
-// const Person = mongoose.model('Person', personSchema)
 
 
 morgan.token('body', function(req) {
