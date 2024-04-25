@@ -5,18 +5,21 @@ const mongoose = require('mongoose')
 
 const password = process.argv[2]
 
-
-const url =
-  `mongodb+srv://obananas073:${password}@persons-db.gxqyxqg.mongodb.net/`
-
-mongoose.set('strictQuery',false)
-mongoose.connect(url)
-
 const app = express()
 
 app.use(express.json())
 app.use(cors())
 app.use(express.static('dist'))
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
+
+
+
+const url =
+  `mongodb+srv://obananas073:${password}@persons-db.gxqyxqg.mongodb.net/personApp?`
+
+
+mongoose.set('strictQuery',false)
+mongoose.connect(url)
 
 
 const personSchema = new mongoose.Schema({
@@ -33,9 +36,6 @@ morgan.token('body', function(req) {
     return JSON.stringify(req.body)
   }
 })
-
-app.use(express.json())
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 let persons = [
     {
@@ -68,12 +68,13 @@ app.get('/api/persons', (request, response) => {
 
 
 app.get('/api/info', (request, response) => {
-  const date = new Date();
-  date.toUTCString();
+  const date = new Date()
+  date.toUTCString()
 
   response.send(
     `<p>Phonebook has info for ${persons.length} people</p>
     <p>${date}<\p>`
+    
   )
 })
 
@@ -126,7 +127,7 @@ app.delete('/api/persons/:id', (request, response) => {
   response.status(204).end()
 })
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT || 3010
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
