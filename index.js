@@ -60,46 +60,68 @@ app.get('/api/info', (request, response) => {
   )
 })
 
+// app.post('/api/persons', (request, response) => {
+//   const body = request.body
+//   if (!body.name || !body.number) {
+//     return response.status(400).json({
+//       error: 'name or number is missing'
+//     })
+
+//   }
+//   const person_name_filter = persons.filter( person => person.name == body.name)
+//   if (person_name_filter.length > 0) {
+//     return response.status(400).json({
+//       error: 'name must be unique'
+//     })
+//   }
+
+//   function getRandomInt(max) {
+//     return Math.floor(Math.random() * max);
+//   }
+
+
+//   const person = {
+//     name: body.name,
+//     number: body.number,
+//     id: getRandomInt(100),
+//   }
+
+//   persons = persons.concat(person)
+
+//   response.json(person)
+// })
+
 app.post('/api/persons', (request, response) => {
-  const body = request.body
-  if (!body.name || !body.number) {
-    return response.status(400).json({
-      error: 'name or number is missing'
+    const body = request.body
+    if (body.name === undefined || body.number === undefined) {
+      return response.status(400).json({ error: 'name or number is missing' })
+    }
+
+    const person = new Person ({
+      name: body.name,
+      number: body.number,
     })
 
-  }
-  const person_name_filter = persons.filter( person => person.name == body.name)
-  if (person_name_filter.length > 0) {
-    return response.status(400).json({
-      error: 'name must be unique'
+    person.save().then(savedPerson => {
+      response.json(savedPerson)
     })
-  }
+  })
 
-  function getRandomInt(max) {
-    return Math.floor(Math.random() * max);
-  }
-
-
-  const person = {
-    name: body.name,
-    number: body.number,
-    id: getRandomInt(100),
-  }
-
-  persons = persons.concat(person)
-
-  response.json(person)
-})
+// app.get('/api/persons/:id', (request, response) => {
+//   const id = Number(request.params.id)
+//   const person = persons.find(person => person.id === id)
+//   if (person) {
+//     response.json(person)
+//   } else {
+//     console.log('No person found')
+//     response.status(404).end()
+//   }
+// })
 
 app.get('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id)
-  const person = persons.find(person => person.id === id)
-  if (person) {
+  Person.findById(request.params.id).then(person => {
     response.json(person)
-  } else {
-    console.log('No person found')
-    response.status(404).end()
-  }
+  })
 })
 
 app.delete('/api/persons/:id', (request, response) => {
