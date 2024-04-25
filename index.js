@@ -1,13 +1,31 @@
 const express = require('express')
 const cors = require('cors')
-const morgan = require("morgan");
+const morgan = require("morgan")
+const mongoose = require('mongoose')
 
+const password = process.argv[2]
+
+
+const url =
+  `mongodb+srv://obananas073:${password}@persons-db.gxqyxqg.mongodb.net/`
+
+mongoose.set('strictQuery',false)
+mongoose.connect(url)
 
 const app = express()
 
 app.use(express.json())
 app.use(cors())
 app.use(express.static('dist'))
+
+
+const personSchema = new mongoose.Schema({
+  name: String,
+  number: String,
+})
+
+
+const Person = mongoose.model('Person', personSchema)
 
 
 morgan.token('body', function(req) {
@@ -41,6 +59,12 @@ let persons = [
       "number": "39-23-6423122"
     }
 ]
+
+app.get('/api/persons', (request, response) => {
+  Person.find({}).then(persons => {
+    response.json(persons)
+  })
+})
 
 
 app.get('/api/info', (request, response) => {
