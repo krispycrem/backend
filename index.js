@@ -37,18 +37,17 @@ app.get('/api/persons', (request, response) => {
   })
 })
 
-
 app.get('/api/info', (request, response) => {
   const date = new Date()
   date.toUTCString()
-
-  response.send(
-    `<p>Phonebook has info for ${persons.length} people</p>
-    <p>${date}<\p>`
-    
-  )
+  Person.find({}).then(persons => {
+    response.send(
+      `<p>Phonebook has info for ${persons.length} people</p>
+      <p>${date}<\p>`
+    )
+  })
 })
-
+  
 app.post('/api/persons', (request, response) => {
     const body = request.body
     if (body.name === undefined || body.number === undefined) {
