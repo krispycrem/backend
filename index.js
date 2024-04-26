@@ -65,7 +65,7 @@ app.post('/api/persons', (request, response) => {
     })
   })
 
-app.get('/api/notes/:id', (request, response, next) => {
+app.get('/api/persons/:id', (request, response, next) => {
   Person.findById(request.params.id)
     .then(person => {
       if (person) {
